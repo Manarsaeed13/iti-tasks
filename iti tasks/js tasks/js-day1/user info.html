@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task 5</title>
+</head>
+<body>
+
+<h2>entering user info</h2>
+<hr>
+
+<form action="" method="get">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required><br><br>
+
+    <label for="phone">Phone Number:</label>
+    <input type="text" id="phone" name="phone" required><br><br>
+
+    <label for="mobile">Mobile Number:</label>
+    <input type="text" id="mobile" name="mobile" required><br><br>
+
+    <label for="email">Email Address:</label>
+    <input type="email" id="email" name="email" required><br><br>
+
+    <input type="submit" value="Submit">
+</form>
+
+<div id="output"></div>
+
+<script>
+
+    const form = document.querySelector('form');
+    const outputDiv = document.getElementById('output');
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const name = document.getElementById('name').value;
+        const phone = document.getElementById('phone').value;
+        const mobile = document.getElementById('mobile').value;
+        const email = document.getElementById('email').value;
+
+        if (isNaN(name) === false || name === "") {
+            alert("Name should be characters only.");
+            return;
+        }
+
+        if (isNaN(phone) || phone.length !== 8) {
+            alert("Phone number should be numeric with length 8.");
+            return;
+        }
+
+        if (isNaN(mobile) || mobile.length !== 11 || (mobile.startsWith("010") === false && mobile.startsWith("011") === false && mobile.startsWith("012") === false)) {
+            alert("Mobile number should be 11 digits and start with 010, 011 or 012.");
+            return;
+        }
+
+        if (email.includes("@") === false || email.includes(".") === false || email.indexOf("@") > email.lastIndexOf(".")) {
+            alert("Email is not formatted correctly.");
+            return;
+        }
+
+        let color = prompt("Choose a color (red, green, blue):");
+        color = color ? color.trim().toLowerCase() : "";
+        if (color !== "red" && color !== "green" && color !== "blue") {
+            color = "black";
+        }
+
+        const today = new Date();
+        const day = today.getDate();
+        const month = today.getMonth() +1;
+        const year = today.getFullYear();
+        const fullDate = today.toDateString();
+
+        outputDiv.innerHTML = `
+        <p style="color:${color}"><strong>Welcome dear guest</strong> <span style="color:black">${name}</span></p>
+        <p style="color:${color}"><strong>your telephone number is</strong> <span style="color:black">${phone}</span></p>
+        <p style="color:${color}"><strong>your mobile number is</strong> <span style="color:black">${mobile}</span></p>
+        <p style="color:${color}"><strong>your email address is</strong> <span style="color:black">${email}</span></p>
+        <br>
+        <p style="color:${color}"><strong>today is</strong> <span style="color:black">${day}</span></p>
+        <p style="color:${color}"><strong>we are in month</strong> <span style="color:black">${month}</span></p>
+        <p style="color:${color}"><strong>and year</strong> <span style="color:black">${year}</span></p>
+        <p style="color:${color}"><strong>today is</strong> <span style="color:black">${fullDate}</span></p>
+        `;
+
+    });
+
+</script>
+</body>
+</html>

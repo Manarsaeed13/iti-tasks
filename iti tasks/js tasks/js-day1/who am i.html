@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>task4</title>
+</head>
+<body>
+
+    <script>
+
+  let animal = "";
+  let fly = confirm("Do you fly?");
+  if (fly === true) {
+    let wild = confirm("Are you wild?");
+    animal = (wild === true) ? "Eagle" : "Parrot";
+  } else {
+    let sea = confirm("Do you live undersea?");
+    if (sea === true) {
+      let wild = confirm("Are you wild?");
+      animal = (wild === true) ? "Shark" : "Dolphin";
+    } else {
+      let wild = confirm("Are you wild?");
+      animal = (wild === true) ? "Lion" : "Cat";
+    }
+  }
+  alert("You are a: " + animal);
+
+    </script>
+</body>
+</html>

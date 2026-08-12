@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>task2</title>
+</head>
+<body>
+
+    <script>
+
+  let sum = 0;
+  let count = 0;
+  while (true) {
+    let input = prompt("Enter a number (0 to stop):");
+    if (isNaN(input)) {
+      alert("Please enter a valid numeric value.");
+      continue;
+    }
+    
+    let num = Number(input);
+    if (num === 0) break;
+    sum += num;
+    count++;
+    if (sum > 100) {
+      alert("Sum exceeded 100. Stopping input.");
+      break;
+    }
+  }
+  alert("Total values entered: " + count + "  Total sum = " + sum);
+
+    </script>
+</body>
+</html>

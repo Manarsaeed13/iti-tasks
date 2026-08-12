@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+<script>
+
+// 1 Count the number of 'e' characters in a string
+
+function countE() {
+  let str = prompt("Enter a string:");
+  let count = 0;
+
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] === 'e' || str[i] === 'E') {
+      count++;
+    }
+  }
+
+  alert(`Number of 'e' characters: ${count}`);
+}
+</script>
+
+
+
+
+<script>
+// 2 Check if a string is a palindrome
+
+function checkPalindrome() {
+  let str = prompt("Enter a string:");
+  let ignoreCase = confirm("Ignore case? (OK for Yes, Cancel for No)");
+  let original = str;
+  let reversed = str.split("").reverse().join("");
+
+  if (ignoreCase) {
+    original = original.toLowerCase();
+    reversed = reversed.toLowerCase();
+  }
+
+  if (original === reversed) {
+    alert(`"${str}" is a palindrome`);
+  } else {
+    alert(`"${str}" is NOT a palindrome`);
+  }
+}
+</script>
+
+<script>
+// 3 Fill an array of 3 elements and apply +, *, /
+
+function arrayMathOps() {
+  let arr = [];
+
+  for (let i = 0; i < 3; i++) {
+    arr.push(Number(prompt(`Enter value ${i + 1}:`)));
+  }
+
+  let sum = arr[0] + arr[1] + arr[2];
+  let product = arr[0] * arr[1] * arr[2];
+  let division = arr[0] / arr[1] / arr[2];
+
+}
+</script>
+
+<script>
+// 4 Fill an array of 5 values and sort descending/ascending
+
+function sortArray() {
+  let arr = [];
+  for (let i = 0; i < 5; i++) {
+    arr.push(Number(prompt(`Enter value ${i + 1}:`)));
+  }
+
+  let ascending = [...arr];
+  for (let i = 0; i < ascending.length; i++) {
+    for (let j = 0; j < ascending.length - 1; j++) {
+      if (ascending[j] > ascending[j + 1]) {
+        let temp = ascending[j];
+        ascending[j] = ascending[j + 1];
+        ascending[j + 1] = temp;
+      }
+    }
+  }
+
+  let descending = [...arr];
+  for (let i = 0; i < descending.length; i++) {
+    for (let j = 0; j < descending.length - 1; j++) {
+      if (descending[j] < descending[j + 1]) {
+        let temp = descending[j];
+        descending[j] = descending[j + 1];
+        descending[j + 1] = temp;
+      }
+    }
+  }
+
+}
+</script>
+
+<script>
+
+// 5 Search for a letter in a sentence, return indexes array
+
+function findLetterIndexes(sentence, letter) {
+  let indexes = [];
+
+  for (let i = 0; i < sentence.length; i++) {
+    if (sentence[i].toLowerCase() === letter.toLowerCase()) {
+      indexes.push(i);
+    }
+  }
+
+  return indexes;
+}
+</script>
+
+
+<script>
+
+// 6 Return two random names from an array of names
+function getTwoRandomNames(names) {
+  let namesCopy = [...names];
+  let result = [];
+
+  for (let i = 0; i < 2; i++) {
+    let randomIndex = Math.floor(Math.random() * namesCopy.length);
+    result.push(namesCopy[randomIndex]);
+    namesCopy.splice(randomIndex, 1); 
+  }
+
+  return result;
+}
+
+</script>
+
+
+<script>
+
+// Circle area from radius
+function circleArea() {
+  let radius = Number(prompt("What is the value of your circles radius"));
+  let area = Math.PI * radius * radius;
+  alert(`Total area of the circle is ${area}`);
+}
+
+
+
+</script>
+
+<script>
+// Square root of a value
+function squareRoot() {
+  let value = Number(prompt("What is the value you want to calculate its square root"));
+  let result = Math.sqrt(value);
+  alert(`square root of ${value} is ${result}`);
+}
+
+
+
+</script>
+
+
+<script>
+// Cos of an angle (in degrees)
+function cosValue() {
+  let angle = Number(prompt("What is the angle you want to calculate its cos value"));
+  let radians = angle * (Math.PI / 180);
+  let result = Math.cos(radians).toFixed(4);
+  document.write(`<p>cos ${angle}&deg; is ${result}</p>`);
+}
+
+</script>
+
+
+
+
+
+
+</body>
+</html>
