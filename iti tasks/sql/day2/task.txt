@@ -1,0 +1,213 @@
+  ====================== task1 ======================== 
+
+ //1
+
+  CREATE table muiscian (
+ id INT PRIMARY KEY AUTO_INCREMENT,
+ name varchar (255) NOT NULL,,
+  st varchar(255),
+   city varchar(100)
+    
+);
+
+
+ //2
+ CREATE TABLE musican_phone(
+    muiscian_id Int NOT NULL,
+     phone Varchar(20) NOT NULL,
+     PRIMARY KEY( muiscian_id,phone),
+      FOREIGN KEY ( muiscian_id) REFERENCES muiscian(id)
+        ON DELETE CASCADE ON UPDATE CASCADE
+
+ );
+
+
+   //3
+    CREATE TABLE album(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    title varchar(255) NOT NULL,
+    cr_date DATE,
+    muiscian_id INT NOT NULL,
+    FOREIGN KEY ( muiscian_id)REFERENCES muiscian(id) 
+    ON DELETE  CASCADE ON UPDATE CASCADE
+    
+    
+
+);
+
+
+//4
+CREATE TABLE instrament(
+       Name VARCHAR(100) PRIMARY KEY,
+     `Key` VARCHAR(50)
+    
+
+);
+
+
+
+//5
+CREATE TABLE song (
+title varchar(255) PRIMARY KEY,
+ author VARCHAR(100),
+  album_id INT NOT NULL,
+   FOREIGN KEY (  album_id)REFERENCES  album(id)
+   ON DELETE  CASCADE ON UPDATE CASCADE
+    
+ 
+);
+
+
+//6
+CREATE TABLE play_instrument (
+  musician_id INT NOT NULL,
+    instrument_Name VARCHAR(100) NOT NULL,
+    PRIMARY KEY( musician_id, instrument_Name),
+    
+     FOREIGN KEY (musician_id) REFERENCES muiscian(id)
+     ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (instrument_Name) REFERENCES   instrament(Name) ON DELETE CASCADE ON UPDATE CASCADE      
+      
+
+
+);
+
+
+//7
+CREATE TABLE play_song (
+    musician_id INT NOT NULL,
+    song_title VARCHAR(255) NOT NULL,
+    
+     PRIMARY KEY (musician_id, song_title),
+      FOREIGN KEY (musician_id) REFERENCES muiscian(id)
+     ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (song_title) REFERENCES song(title) 
+    ON DELETE CASCADE ON UPDATE CASCADE      
+      
+);
+
+
+
+
+//insert Task 1
+
+INSERT INTO muiscian (name, st, city) VALUES 
+('John Lennon', 'Abbey Road', 'Liverpool'),
+('Paul McCartney', 'Fortress Road', 'London');
+
+
+INSERT INTO musican_phone (muiscian_id, phone) VALUES 
+(1, '0111222333'),
+(2, '0155667788');
+
+
+INSERT INTO album (title, cr_date, muiscian_id) VALUES 
+('Abbey Road', '1969-09-26', 1),
+('McCartney II', '1980-05-16', 2);
+
+
+INSERT INTO instrament (Name, `Key`) VALUES 
+('Guitar', 'C'),
+('Piano', 'F');
+
+INSERT INTO song (title, author, album_id) VALUES 
+('Come Together', 'John Lennon', 1),
+('Coming Up', 'Paul McCartney', 2);
+
+INSERT INTO play_instrument (musician_id, instrument_Name) VALUES 
+(1, 'Guitar'),
+(2, 'Piano');
+
+INSERT INTO play_song (musician_id, song_title) VALUES 
+(1, 'Come Together'),
+(2, 'Coming Up');
+
+
+
+
+
+======================== task2 =============================
+
+
+ create database task_sales;
+
+ //1
+
+CREATE TABLE sales_office (
+    NUM INT PRIMARY KEY AUTO_INCREMENT,
+    Loc VARCHAR(255),
+    employee_ID INT UNIQUE,  
+    FOREIGN KEY (employee_ID) REFERENCES employee(ID)
+    ON DELETE CASCADE ON UPDATE CASCADE      
+);
+
+
+//2
+
+CREATE TABLE employee (
+    ID INT PRIMARY KEY,
+    Name VARCHAR(100),
+    Office_NUM INT,
+    CONSTRAINT fk_employee_office FOREIGN KEY (Office_NUM) REFERENCES sales_office(NUM)
+);
+
+
+//3
+
+CREATE TABLE property (
+    ID INT PRIMARY KEY AUTO_INCREMENT,
+    Add_ VARCHAR(255),
+    City VARCHAR(100),
+    State VARCHAR(100),
+    Zip VARCHAR(20),
+    office_num_fk INT NOT NULL,
+
+    FOREIGN KEY (office_num_fk) REFERENCES sales_office(NUM)
+        ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+
+//4
+CREATE TABLE owner (
+    ID INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(200) NOT NULL
+);
+
+
+//5
+CREATE TABLE property_owner (
+    property_id INT NOT NULL,
+    owner_id INT NOT NULL,
+    percent_owned DECIMAL(5,2),  
+
+    PRIMARY KEY (property_id, owner_id),
+
+    FOREIGN KEY (property_id) REFERENCES property(ID)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (owner_id) REFERENCES owner(ID)
+        ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+
+
+// insert Task 2
+
+INSERT INTO employee (ID, Name, Office_NUM) VALUES 
+(1, 'Ahmed Ali', NULL),
+(2, 'Mona Mohamed', NULL);
+
+INSERT INTO sales_office (Loc, employee_ID) VALUES 
+('Cairo Branch', 1),
+('Alexandria Branch', 2);
+
+INSERT INTO property (Add_, City, State, Zip, office_num_fk) VALUES 
+('12 Tahrir St', 'Cairo', 'Cairo Gov', '11511', 1),
+('45 Corniche Rd', 'Alexandria', 'Alexandria Gov', '21521', 2);
+
+INSERT INTO owner (Name) VALUES 
+('Ibrahim Hassan'),
+('Khaled Mahmoud');
+
+INSERT INTO property_owner (property_id, owner_id, percent_owned) VALUES 
+(1, 1, 100.00),
+(2, 2, 50.00);

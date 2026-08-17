@@ -1,0 +1,6 @@
+Difference Between
+
+ isset() and empty()
+​Note: PHP provides empty(), not isEmpty().
+​isset($var): Checks if a variable is declared and is not NULL. It returns true even if the variable holds 0, "" (empty string), or false.
+​empty($var): Checks if a variable is falsy or empty. It returns true for "", 0, 0.0, "0", null, false, [], or undeclared variables.

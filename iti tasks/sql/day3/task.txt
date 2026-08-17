@@ -1,0 +1,232 @@
+
+1. Display the Department id, name and id and the name of its manager.
+SELECT D.dep_Number, D.name AS department_name, E.ssn, E.name AS manager_name
+FROM department D, employee E
+WHERE D.employee_ssn = E.ssn;
+
+
+
+
+2. Display the name of the departments and the name of the projects under its control.
+SELECT D.name AS department_name, P.name AS project_name
+FROM department D, project P
+WHERE D.dep_Number = P.dep_number_fk;
+
+
+3. Display the full data about all the dependents associated with the name of the employee they depend on.
+SELECT DEP.*, E.name AS employee_name
+FROM Emp_dependences DEP, employee E
+WHERE DEP.emp_num = E.ssn;
+
+
+
+4. Display the Id, name and location of the projects in Cairo or Alex city.
+SELECT number, name, location
+FROM project
+WHERE location IN ('Cairo', 'Alex');
+
+
+5. Display the Projects full data of the projects with a name starts with "a" letter.
+SELECT *
+FROM project
+WHERE name LIKE 'a%';
+
+
+6. Display all the employees in department 30 whose salary from 1000 to 2000 LE monthly.
+SELECT *
+FROM employee
+WHERE dep_num_fk = 30 AND salary BETWEEN 1000 AND 2000;
+
+
+7. Retrieve the names of all employees in department 10 who work more than or equal 10 hours per week on "AL Rabwah" project.
+SELECT E.name
+FROM employee E, Emp_project EP, project P
+WHERE E.ssn = EP.emp_num
+  AND EP.pro_num = P.number
+  AND P.name = 'AL Rabwah'
+  AND EP.hours >= 10
+  AND E.dep_num_fk = 10;
+
+
+8. Find the names of the employees who are directly supervised by Kamel Mohamed.
+SELECT E.name
+FROM employee E, employee S
+WHERE E.emp_supervisor = S.ssn
+  AND S.name = 'Kamel Mohamed';
+
+9. Retrieve the names of all employees and the names of the projects they are working on, sorted by project name.
+SELECT E.name AS employee_name, P.name AS project_name
+FROM employee E, Emp_project EP, project P
+WHERE E.ssn = EP.emp_num AND EP.pro_num = P.number
+ORDER BY P.name;
+ 
+
+
+10. For each project located in Cairo City, find the project number, the controlling department name, the department manager's name, address and birthdate.
+SELECT P.number, D.name AS department_name, E.name AS manager_name, E.address, E.BD
+FROM project P, department D, employee E
+WHERE P.dep_number_fk = D.dep_Number
+  AND D.employee_ssn = E.ssn
+  AND P.location = 'Cairo';
+
+ 
+11. Display All Data of the managers.
+SELECT E.*
+FROM employee E
+WHERE E.ssn IN (SELECT employee_ssn FROM department);
+
+12. Display All Employees data and the data of their dependents even if they have no dependents.
+SELECT E.ssn, E.name AS employee_name, DEP.name AS dependent_name, DEP.gender, DEP.BD
+FROM employee E LEFT OUTER JOIN Emp_dependences DEP
+ON E.ssn = DEP.emp_num;
+
+13. Insert your personal data to the employee table as a new employee in department number 30, SSN = 102672, Superssn = 112233.
+INSERT INTO employee (ssn, name, address, BD, gender, salary, dep_num_fk, emp_supervisor)
+VALUES (102672, 'Manar Elkholy', 'Cairo, Egypt', '2000-01-01', 'female', 4000.00, 30, 112233);
+ 
+14. Insert another employee with personal data of your friend as a new employee in department number 30, SSN = 102660, but don't enter any value for salary or manager number.
+INSERT INTO employee (ssn, name, dep_num_fk)
+VALUES (102660, 'Friend Name', 30);
+ 
+15. In the department table insert a new department called "DEPT IT", with id 100, employee with SSN = 112233 as a manager for this department. The start date for this manager is '1-11-2006'.
+INSERT INTO department (dep_Number, name, employee_ssn, start_date)
+VALUES (100, 'DEPT IT', 112233, '2006-11-01');
+ 
+16. Display (Using UNION): a. The name and gender of the dependents whose gender is Female and who depend on a Female Employee. b. And the male dependents who depend on a Male Employee.
+SELECT DEP.name AS dependent_name, DEP.gender
+FROM Emp_dependences DEP, employee E
+WHERE DEP.emp_num = E.ssn AND DEP.gender = 'female' AND E.gender = 'female'
+UNION
+SELECT DEP.name AS dependent_name, DEP.gender
+FROM Emp_dependences DEP, employee E
+WHERE DEP.emp_num = E.ssn AND DEP.gender = 'male' AND E.gender = 'male';
+
+
+17. For each project, list the project name and the total hours per week (for all employees) spent on that project.
+SELECT P.name AS project_name, SUM(EP.hours) AS total_hours
+FROM project P, Emp_project EP
+WHERE P.number = EP.pro_num
+GROUP BY P.name;
+
+ 
+18. Display the data of the department which has the smallest employee ID over all employees' ID.
+SELECT D.*
+FROM department D
+WHERE D.dep_Number = (
+  SELECT dep_num_fk FROM employee
+  WHERE ssn = (SELECT MIN(ssn) FROM employee)
+);
+
+
+19. For each department, retrieve the department name and the maximum, minimum and average salary of its employees.
+SELECT D.name AS department_name, MAX(E.salary) AS max_salary, MIN(E.salary) AS min_salary, AVG(E.salary) AS avg_salary
+FROM department D, employee E
+WHERE D.dep_Number = E.dep_num_fk
+GROUP BY D.name;
+ 
+20. List the name of all managers who have no dependents.
+SELECT E.name
+FROM employee E
+WHERE E.ssn IN (SELECT employee_ssn FROM department)
+  AND E.ssn NOT IN (SELECT emp_num FROM Emp_dependences);
+
+________________________________________
+
+Stored Procedures
+1. Create a stored procedure to display all employees in a given department.
+DELIMITER $$
+CREATE PROCEDURE Show_Dept_Employees (IN p_dep INT)
+BEGIN
+  SELECT * FROM employee WHERE dep_num_fk = p_dep;
+END$$
+DELIMITER ;
+
+2. Create a stored procedure that takes an employee SSN as a parameter and displays all employee information.
+DELIMITER $$
+CREATE PROCEDURE Show_Employee_Info (IN p_ssn INT)
+BEGIN
+  SELECT * FROM employee WHERE ssn = p_ssn;
+END$$
+DELIMITER ;
+
+3. Create a stored procedure to increase the salary of all employees in a specific department by 10%.
+DELIMITER $$
+CREATE PROCEDURE Increase_Salary (IN p_dep INT)
+BEGIN
+  UPDATE employee
+  SET salary = salary * 1.1
+  WHERE dep_num_fk = p_dep;
+END$$
+DELIMITER ;
+ 
+4. Create a stored procedure that returns the total number of employees in a given department.
+DELIMITER $$
+CREATE PROCEDURE Total_Employees (IN p_dep INT, OUT p_count INT)
+BEGIN
+  SELECT COUNT(*) INTO p_count FROM employee WHERE dep_num_fk = p_dep;
+END$$
+DELIMITER ;
+
+5. Create a stored procedure to display the employee with the highest salary in each department.
+DELIMITER $$
+CREATE PROCEDURE Highest_Paid_Per_Dept ()
+BEGIN
+  SELECT E.dep_num_fk, E.name, E.salary
+  FROM employee E
+  WHERE E.salary = (SELECT MAX(salary) FROM employee WHERE dep_num_fk = E.dep_num_fk);
+END$$
+DELIMITER ;
+
+CALL Show_Dept_Employees(30);
+
+
+CALL Show_Employee_Info(112233);
+ 
+________________________________________
+Transactions
+1. Create a transaction to insert a new employee and commit the changes.
+START TRANSACTION;
+INSERT INTO employee (name, dep_num_fk) VALUES ('Test Employee One', 1);
+COMMIT;
+ 
+2. Create a transaction that inserts a new employee and then rolls back the transaction.
+START TRANSACTION;
+INSERT INTO employee (name, dep_num_fk) VALUES ('Temp Employee', 1);
+ROLLBACK;
+ 
+3. Create a transaction to update employee salaries by 5%, then rollback the changes.
+START TRANSACTION;
+UPDATE employee SET salary = salary * 1.05;
+ROLLBACK;
+ 
+4. Demonstrate the use of COMMIT, ROLLBACK, and SAVEPOINT with suitable examples.
+START TRANSACTION;
+UPDATE employee SET salary = salary + 100 WHERE dep_num_fk = 1;
+SAVEPOINT sp1;
+UPDATE employee SET salary = salary + 200 WHERE dep_num_fk = 2;
+ROLLBACK TO sp1;
+COMMIT;
+ 
+________________________________________
+Indexes
+1. Create an index on the Employee name (no separate last-name column exists).
+CREATE INDEX idx_emp_name ON employee(name);
+ 
+2. Create a composite index on (Department Number, Salary).
+CREATE INDEX idx_emp_dep_salary ON employee(dep_num_fk, salary);
+ 
+3. List all indexes created on the Employee table.
+SHOW INDEX FROM employee;
+ 
+4. Drop the index created on Employee name.
+DROP INDEX idx_emp_name ON employee;
+
+5. Explain when indexes improve query performance and when they may reduce performance.
+===Indexes improve performance when we have a large table and we frequently use WHERE, JOIN, or ORDER BY on a specific column, because it avoids a slow Full Table Scan.
+===Indexes can reduce performance in these cases:
+•	Frequent modifications: When the table has many INSERT, UPDATE, or DELETE operations (because the index must be updated every time).
+•	Low Selectivity: When a column has many duplicate values (like gender, which only has two values).
+•	Small tables: When the table is small, a Full Table Scan is faster than using an index.
+•	Storage: Every index takes extra storage space on the disk.
+
+
